@@ -28,6 +28,9 @@ class Actor(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse('person_view_url', kwargs={'slug': self.name})
+
     class Meta:
         verbose_name = 'Актер/Режиссер'
         verbose_name_plural = 'Актеры/Режиссеры'
@@ -78,7 +81,7 @@ class Movie(models.Model):
     class Meta:
         verbose_name = 'Фильм'
         verbose_name_plural = 'Фильмы'
-        ordering = ['-world_premiere']
+        # ordering = ['-world_premiere']
 
 
 class MovieShots(models.Model):
