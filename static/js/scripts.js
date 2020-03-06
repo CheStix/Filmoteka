@@ -1,3 +1,18 @@
+//set rating star
+const rating = document.querySelector('form[name=rating]');
+
+rating.addEventListener("change", function (e) {
+    // get data from form
+    let data = new FormData(this);
+    fetch(`${this.action}`, {
+        method: 'POST',
+        body: data
+    })
+        .then(response => alert("Рейтинг устновлен"))
+        .catch(error => alert("Ошибка"))
+});
+
+//genre and year filter
 function  ajaxSend(url, params) {
     //отправляем Ajax запрос
     fetch(`${url}?${params}`, {
@@ -56,4 +71,5 @@ let html = '\
             </div>\
         </div>\
     </div>\
-{{/movies}}';
+{{/movies}}'
+
