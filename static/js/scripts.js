@@ -26,15 +26,15 @@ function  ajaxSend(url, params) {
         .catch(error => console.error(error))
 }
 
-const form = document.querySelector('form[name=filter]');
-
-form.addEventListener('submit', function (e) {
-    //получаем данные из формы
-    e.preventDefault();
-    let url = this.action;
-    let params = new URLSearchParams(new FormData(this)).toString();
-    ajaxSend(url, params);
-});
+// const form = document.querySelector('form[name=filter]');
+//
+// form.addEventListener('submit', function (e) {
+//     //получаем данные из формы
+//     e.preventDefault();
+//     let url = this.action;
+//     let params = new URLSearchParams(new FormData(this)).toString();
+//     ajaxSend(url, params);
+// });
 
 function render(data) {
     //рендер шаблона
