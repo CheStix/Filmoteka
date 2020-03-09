@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+from Filmoteka import prod_settings
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -41,6 +42,7 @@ INSTALLED_APPS = [
     'ckeditor',
     'ckeditor_uploader',
     'movies.apps.MoviesConfig',
+    'snowpenguin.django.recaptcha3',
 ]
 
 MIDDLEWARE = [
@@ -197,3 +199,9 @@ CKEDITOR_CONFIGS = {
         ]),
     }
 }
+
+# django recaptcha3 conf
+RECAPTCHA_PRIVATE_KEY = prod_settings.RECAPTCHA_PRIVATE_KEY
+RECAPTCHA_PUBLIC_KEY = prod_settings.RECAPTCHA_PUBLIC_KEY
+RECAPTCHA_DEFAULT_ACTION = 'generic'
+RECAPTCHA_SCORE_THRESHOLD = 0.5
