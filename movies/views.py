@@ -14,8 +14,7 @@ class GenreYear:
         return Genre.objects.all()
 
     def get_years(self):
-        return Movie.objects.filter(draft=False).values('year')
-        # return Movie.objects.only('year').order_by('year').distinct()
+        return Movie.objects.filter(draft=False).values('year').distinct()
 
 
 class MovieView(GenreYear, ListView):
@@ -64,18 +63,19 @@ class FilterMovie(GenreYear, ListView):
     paginate_by = 6
     
     def get_queryset(self):
-        queryset = Movie.objects.filter(
-            Q(year__in=self.request.GET.getlist('year')) | Q(genres__in=self.request.GET.getlist('genre'))
-        ).distinct()
-        return queryset
+        if self.request.GET.getlist('year') and self.request.GET.getlist('genre'):
+            queryset = Movie.objects.filter(year__in=self.request.GET.getlist('year'), genres__in=self.request.GET.getlist('genre'))
+        else:
+            queryset = Movie.objects.filter(
+                Q(year__in=self.request.GET.getlist('year')) | Q(genres__in=self.request.GET.getlist('genre'))
+                ).distinct()
+        return queryset.order_by('-world_premiere')
     
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context['year'] = ''.join([f'year={x}&' for x in self.request.GET.getlist('year')])
         context['genre'] = ''.join([f'genre={x}&' for x in self.request.GET.getlist('genre')])
         return context
-
-#TODO поиск через оператор "И"
 
 
 class JsonFilterMovieView(ListView):
