@@ -1,15 +1,16 @@
 from django.db.models import Q
 from django.http import JsonResponse, HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.views.generic import ListView, DetailView
 from django.views.generic.base import View
 
 from .models import Movie, Actor, Genre, Rating
-from .forms import ReviewForm,  RatingForm
+from .forms import ReviewForm, RatingForm
 
 
 class GenreYear:
     """Все жанры и года выходов фильмов"""
+
     def get_genres(self):
         return Genre.objects.all()
 
@@ -39,6 +40,7 @@ class MovieDetailView(GenreYear, DetailView):
 
 class AddReview(View):
     """Добавление отзыва"""
+
     def post(self, request, pk):
         form = ReviewForm(request.POST)
         movie = Movie.objects.get(id=pk)
@@ -61,17 +63,20 @@ class PersonView(GenreYear, DetailView):
 class FilterMovie(GenreYear, ListView):
     """фильтр фильмов"""
     paginate_by = 6
-    
+
     def get_queryset(self):
+        # если фильтр запрошен и по годам и по жанрам
         if self.request.GET.getlist('year') and self.request.GET.getlist('genre'):
-            queryset = Movie.objects.filter(year__in=self.request.GET.getlist('year'), genres__in=self.request.GET.getlist('genre'))
-        else:
+            queryset = Movie.objects.filter(year__in=self.request.GET.getlist('year'),
+                                            genres__in=self.request.GET.getlist('genre'))
+        else:  # если нет, выбрать или по годам или по жанрам
             queryset = Movie.objects.filter(
                 Q(year__in=self.request.GET.getlist('year')) | Q(genres__in=self.request.GET.getlist('genre'))
-                ).distinct()
+            ).distinct()
         return queryset.order_by('-world_premiere')
-    
+
     def get_context_data(self, *args, **kwargs):
+        # создаем элементы контекста для формирования get сылок в шаблоне для пагинации
         context = super().get_context_data(*args, **kwargs)
         context['year'] = ''.join([f'year={x}&' for x in self.request.GET.getlist('year')])
         context['genre'] = ''.join([f'genre={x}&' for x in self.request.GET.getlist('genre')])
@@ -80,6 +85,7 @@ class FilterMovie(GenreYear, ListView):
 
 class JsonFilterMovieView(ListView):
     """Фильтр фильмов в json"""
+
     def get_queryset(self):
         queryset = Movie.objects.filter(
             Q(year__in=self.request.GET.getlist('year')) | Q(genres__in=self.request.GET.getlist('genre'))
@@ -93,6 +99,7 @@ class JsonFilterMovieView(ListView):
 
 class AddStarRating(View):
     """добавление рейтинга к фильму"""
+
     def get_client_ip(self, request):
         x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
         if x_forwarded_for:

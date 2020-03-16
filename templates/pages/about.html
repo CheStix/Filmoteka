@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+    <section class="ab-info-main py-md-5 py-4 editContent" style="padding-left: 3rem; padding-right: 3rem;">
+        <div class="container">
+            <div class="row">
+                <div class="side-bar col-lg-4">
+                    {% include 'include/sidebar.html' %}
+                </div>
+                {{ flatpage.content }}
+            </div>
+        </div>
+    </section>
+{% endblock content %}
+
+
