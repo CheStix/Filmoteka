@@ -47,6 +47,9 @@ INSTALLED_APPS = [
     'movies.apps.MoviesConfig',
     'contact.apps.ContactConfig',
     'snowpenguin.django.recaptcha3',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
 ]
 
 MIDDLEWARE = [
@@ -92,6 +95,11 @@ DATABASES = {
     }
 }
 
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -126,6 +134,14 @@ USE_L10N = True
 USE_TZ = True
 
 SITE_ID = 1
+
+LOGIN_REDIRECT_URL = '/'
+
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
+ACCOUNT_USERNAME_MIN_LENGTH = 4
+
+EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
+
 
 gettext = lambda s: s
 LANGUAGES = (
